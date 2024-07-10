@@ -1,29 +1,40 @@
 
 ## Bot Sinais Blaze
 
-### @author [Guilhermee19 🔗](http://iamgui.dev)
+##### @author [Guilhermee19 🔗](http://iamgui.dev)
 
-#### Criar um ambiente virtual Windows
+##### Criar um ambiente virtual Windows
 
 ```
   .venv\Scripts\activate
 ```
 
-#### Criar um ambiente virtual Linux
+##### Criar um ambiente virtual Linux
 
 ```
   source .venv/bin/activate
 ```
 
 
-#### Instalar as bibliotecas
+##### Instalar as bibliotecas
 
 ```
   python install -r requirements.txt
 ```
 
-#### Rodar sistema
+### Variaveis ENV
+##### Crie um arquivo .env
+
+```
+  TELEGRAM_TOKEN = 'TOKEM'
+  CHAT_ID = 'ID'
+```
+
+
+##### Rodar sistema
 
 ```
   python main.py
 ```
+
+
