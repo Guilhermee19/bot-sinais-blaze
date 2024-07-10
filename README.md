@@ -9,6 +9,12 @@
   .venv\Scripts\activate
 ```
 
+#### Criar um ambiente virtual Linux
+
+```
+  source .venv/bin/activate
+```
+
 
 #### Instalar as bibliotecas
 
