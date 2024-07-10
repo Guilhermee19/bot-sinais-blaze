@@ -1,0 +1,44 @@
+[
+    {
+        "title": "relu_0",
+        "rule": [
+            "black",
+            "red",
+            "black",
+            "red"
+        ],
+        "next": "black",
+        "points": 0
+    },
+    {
+        "title": "relu_1",
+        "rule": [
+            "red",
+            "black",
+            "red",
+            "black"
+        ],
+        "next": "red",
+        "points": 0
+    },
+    {
+        "title": "relu_2",
+        "rule": [
+            "red",
+            "black",
+            "black"
+        ],
+        "next": "red",
+        "points": 0
+    },
+    {
+        "title": "relu_3",
+        "rule": [
+            "black",
+            "red",
+            "red"
+        ],
+        "next": "black",
+        "points": 0
+    }
+]
