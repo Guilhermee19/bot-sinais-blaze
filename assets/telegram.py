@@ -17,11 +17,11 @@ def get_chat_id():
     response = requests.get(url).json()
     
     try:
-        for update in response["result"]:
-            chat = update["message"]["chat"]
+        for update in response['result']:
+            chat = update['message']['chat']
             print(chat, "\n")
-            if chat["type"] in ["group", "supergroup"]:  # Filtra apenas grupos
-                return chat["id"]
+            if chat['type'] in ['group', 'supergroup']:  # Filtra apenas grupos
+                return chat['id']
     except KeyError:
         return None
     

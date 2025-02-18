@@ -36,12 +36,12 @@ def aviso_entrada(cor="Preto", number={"cor": "Vermelho", "numero": 1}, aposta=2
     
 def entrada_preto(number={"cor": "Vermelho", "numero": 1}):
     return (f"⚫⚫ Atenção: Entrar no Preto ⚫⚫\n"
-            f"Entrar apos {number["numero"]}\n"
+            f"Entrar apos {number['numero']}\n"
             "⚪ | Proteger no Branco \n"
             "📢 | Fazer até 2 GALES \n")
     
 def entrada_vermelho(number={"cor": "Vermelho", "numero": 1}):
     return (f"🔴🔴 Atenção entrar no Vermelho 🔴🔴\n"
-            f"Entrar apos {number["numero"]}\n"
+            f"Entrar apos {number['numero']}\n"
             "⚪ | Proteger no Branco \n"
             "📢 | Fazer até 2 GALES \n")

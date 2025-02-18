@@ -240,12 +240,12 @@ def verificar_padroes(cores, numbers):
 
     # Verifica se há n-1 cores consecutivas e envia alerta apenas uma vez
     if not alertado and not entrada_realizada:
-        if cores[-(sequencia_para_entrada-1):] == ["Vermelho"] * (sequencia_para_entrada-1):
+        if cores[-(sequencia_para_entrada-1):] == ['Vermelho'] * (sequencia_para_entrada-1):
             menssage= aviso_entrada("Preto", numbers[-1], aposta_inicial)
             print(menssage)
             enviar_mensagem(menssage)
             alertado = True
-        elif cores[-(sequencia_para_entrada-1):] == ["Preto"] * (sequencia_para_entrada-1):
+        elif cores[-(sequencia_para_entrada-1):] == ['Preto'] * (sequencia_para_entrada-1):
             menssage= aviso_entrada("Vermelho", numbers[-1], aposta_inicial)
             print(menssage)
             enviar_mensagem(menssage)
@@ -253,14 +253,14 @@ def verificar_padroes(cores, numbers):
 
     # Verifica se há n-1 cores iguais + 1 cor diferente (alarme falso)
     if alertado and not entrada_realizada:
-        if cores[-sequencia_para_entrada:-1] == ["Vermelho"] * (sequencia_para_entrada-1) and cores[-1] != "Vermelho":
+        if cores[-sequencia_para_entrada:-1] == ['Vermelho'] * (sequencia_para_entrada-1) and cores[-1] != "Vermelho":
             print(aviso_falso)
             enviar_mensagem(aviso_falso + "\n\n\n\n\n")
             resetar_entrada = True
             alertado = False  # Reseta o estado do alerta para permitir novos padrões
             entrada_realizada = False  # Reseta o padrão para novas entradas
 
-        elif cores[-sequencia_para_entrada:-1] == ["Preto"] * (sequencia_para_entrada-1) and cores[-1] != "Preto":
+        elif cores[-sequencia_para_entrada:-1] == ['Preto'] * (sequencia_para_entrada-1) and cores[-1] != "Preto":
             print(aviso_falso)
             enviar_mensagem(aviso_falso + "\n\n\n\n\n")
             resetar_entrada = True
@@ -269,7 +269,7 @@ def verificar_padroes(cores, numbers):
 
     # Verifica se há n cores consecutivas para realizar entrada
     if alertado and not entrada_realizada:
-        if cores[-sequencia_para_entrada:] == ["Vermelho"] * sequencia_para_entrada:
+        if cores[-sequencia_para_entrada:] == ['Vermelho'] * sequencia_para_entrada:
             # print(sinal_vermelho)
             # entrada_preto()
             # enviar_mensagem(sinal_vermelho)
@@ -281,7 +281,7 @@ def verificar_padroes(cores, numbers):
             entrada_realizada = True
             cor_da_entrada = "Preto"  # Entrada será no Preto
             aguardando_resultado = True
-        elif cores[-sequencia_para_entrada:] == ["Preto"] * sequencia_para_entrada:
+        elif cores[-sequencia_para_entrada:] == ['Preto'] * sequencia_para_entrada:
             # print(sinal_preto)
             # enviar_mensagem(sinal_preto)
             menssage = entrada_vermelho(numbers[-1])
