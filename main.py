@@ -23,7 +23,8 @@ chrome_options.add_argument("--ignore-ssl-errors")
 chrome_options.add_argument("--headless")  # Ativa o modo headless
 
 # Inicializar navegador
-nav = webdriver.Chrome(options=chrome_options)
+# nav = webdriver.Chrome(options=chrome_options)
+nav = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver")
 
 # Mensagens de status
 msg_ativo = "✅ Bot Ativo"
