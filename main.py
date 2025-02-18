@@ -17,14 +17,15 @@ load_dotenv()
 # Inicializa a biblioteca colorama
 init()  
 
-# Configurações do navegador
+# # Configurações do navegador
 chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--ignore-certificate-errors")
-chrome_options.add_argument("--ignore-ssl-errors")
-chrome_options.add_argument("--headless")  # Ativa o modo headless
+
+# chrome_options.add_argument("--ignore-certificate-errors")
+# chrome_options.add_argument("--ignore-ssl-errors")
+# chrome_options.add_argument("--headless")  # Ativa o modo headless
 
 # Inicializar navegador
-# nav = webdriver.Chrome(options=chrome_options)
+nav = webdriver.Chrome(options=chrome_options)
 
 # Define o caminho do ChromeDriver
 chrome_driver_path = "/usr/bin/chromedriver"
