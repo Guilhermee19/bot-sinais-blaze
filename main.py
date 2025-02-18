@@ -2,7 +2,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.service import Service
 import time
 import os
 from colorama import init, Fore, Style
@@ -25,13 +24,7 @@ chrome_options.add_argument("--headless")  # Ativa o modo headless
 
 # Inicializar navegador
 # nav = webdriver.Chrome(options=chrome_options)
-
-# Define o caminho do ChromeDriver
-chrome_driver_path = "/usr/bin/chromedriver"
-
-# Inicializa o ChromeDriver corretamente
-service = Service(chrome_driver_path)
-nav = webdriver.Chrome(service=service)
+nav = webdriver.Chrome("/usr/bin/chromedriver")
 
 # Mensagens de status
 msg_ativo = "✅ Bot Ativo"
