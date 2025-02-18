@@ -31,7 +31,7 @@ def aviso_entrada(cor="Preto", number={"cor": "Vermelho", "numero": 1}, aposta=2
         icon = "🔴"
         
     return (f"⚠️ Atenção para possível entrada\n"
-            f"{icon} | Entrar no {cor.capitalize()}\n")
+            f"{icon} | {cor.capitalize()}\n")
     
     
 def entrada_preto(number={"cor": "Vermelho", "numero": 1}):
