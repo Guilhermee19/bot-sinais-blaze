@@ -30,18 +30,18 @@ def aviso_entrada(cor="Preto", number={"cor": "Vermelho", "numero": 1}, aposta=2
     if cor == "Vermelho":
         icon = "🔴"
         
-    # Definindo as cores conforme a variável 'cor'
-    if number['cor'] == 'Vermelho':
-        cor_console = Fore.RED
-    elif cor == 'Preto':
-        cor_console = Fore.BLACK
-    elif cor == 'Branco':
-        cor_console = Fore.WHITE
-    else:
-        cor_console = Fore.YELLOW  # Cor padrão, caso seja desconhecido
-
-    return (f"⚠️ Atenção para entrada\n"
-            f"{icon} | Entrar no {cor.capitalize()} após [{number['numero']}]\n"
+    return (f"⚠️ Atenção para possível entrada\n"
+            f"{icon} | Entrar no {cor.capitalize()}\n")
+    
+    
+def entrada_preto(number={"cor": "Vermelho", "numero": 1}):
+    return (f"⚫⚫ Atenção: Entrar no Preto ⚫⚫\n"
+            f"Entrar apos {number["numero"]}\n"
             "⚪ | Proteger no Branco \n"
-            "📢 | Fazer até 2 GALES \n"
-            f"📢 | Entrar com R$ {round(aposta, 2)}")
+            "📢 | Fazer até 2 GALES \n")
+    
+def entrada_vermelho(number={"cor": "Vermelho", "numero": 1}):
+    return (f"🔴🔴 Atenção entrar no Vermelho 🔴🔴\n"
+            f"Entrar apos {number["numero"]}\n"
+            "⚪ | Proteger no Branco \n"
+            "📢 | Fazer até 2 GALES \n")

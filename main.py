@@ -7,7 +7,7 @@ import os
 from colorama import init, Fore, Style
 
 from dotenv import load_dotenv
-from assets.telegram import enviar_mensagem
+from assets.telegram import *
 from assets.logger import *
 
 # Carrega as variáveis do .env
@@ -27,7 +27,7 @@ nav = webdriver.Chrome(options=chrome_options)
 
 # Mensagens de status
 msg_ativo = "✅ Bot Ativo"
-aviso_falso = "🚫 Alarme falso: Aguardando novo padrão."
+aviso_falso = "🚫 Alarme falso \nAguardando novo padrão."
 sinal_vermelho = "⚫⚫ Atenção: Entrar no Preto ⚫⚫"
 sinal_preto = "🔴🔴 Atenção entrar no Vermelho 🔴🔴"
 sinal_gale = "📢 GALE - Duplicar aposta repetindo a entrada."
@@ -35,8 +35,8 @@ proteger_branco_10 = "⚪ Lembrar de proteger patrimônio com 10% no Branco.⚪"
 msg_encerrado = "❌ Bot Encerrado"
 
 # Variáveis configuráveis pelo usuário
-banca = 42.02  # Banca inicial em reais
-banca_inicial = 42.02  # Armazena o valor inicial da banca para cálculo de vitórias e derrotas
+banca = 140.08  # Banca inicial em reais
+banca_inicial = 140.08  # Armazena o valor inicial da banca para cálculo de vitórias e derrotas
 aposta_inicial = 2
 protecao_inicial = aposta_inicial * 0.10
 aposta_gale = 2 * aposta_inicial
@@ -44,7 +44,7 @@ protecao_gale = protecao_inicial * 2  # Valor da aposta inicial
 sequencia_para_entrada = 5 # Configuração inicial: N cores iguais para entrada
 
 # Controle de Resultados
-vitorias = 5
+vitorias = 8
 perdas = 0
 protegido = 0
 
@@ -163,9 +163,9 @@ def verificar_padroes(cores, numbers):
                 calcular_ganho_acumulado()
                 vitorias += 1
                 print_colorama(Fore.GREEN ,f"✅ Vitória sem Gale!")
-                print(f"📊 Banca atual: R${banca:.2f}, Ganho acumulado: R${ganho_acumulado:.2f}")
+                print(f"📊 Banca atual: R${banca:.2f}")
                 enviar_mensagem(f"RELATORIO:\n✅ Vitória com Gale!\n\n\n\n")
-                # enviar_mensagem(f"RELATORIO:\n✅ Vitória com Gale!\n📊 Banca atual: R${banca:.2f}\n🏆 Vitórias: {vitorias}\n💰 Ganho acumulado: R${ganho_acumulado:.2f}\n\n\n\n\n")
+                # enviar_mensagem(f"RELATORIO:\n✅ Vitória com Gale! \n\n\n\n\n")
                 resetar_entrada = True
                 fazendo_gale = False
 
@@ -180,8 +180,8 @@ def verificar_padroes(cores, numbers):
                 calcular_ganho_acumulado()
                 vitorias += 1
                 print_colorama(Fore.GREEN ,f"✅ Vitória sem Gale!")
-                print(f"📊 Banca atual: R${banca:.2f}, Ganho acumulado: R${ganho_acumulado:.2f}")
-                enviar_mensagem(f"RELATORIO:\n✅ Vitória sem Gale!\n📊 Banca atual: R${banca:.2f}\n🏆 Vitórias: {vitorias}\n💰 Ganho acumulado: R${ganho_acumulado:.2f}\n\n\n\n\n")
+                print(f"📊 Banca atual: R${banca:.2f}")
+                enviar_mensagem(f"RELATORIO:\n✅ Vitória sem Gale! \n\n\n\n\n")
                 
             if vitorias_consecutivas >= 4:
                 print_colorama(Fore.CYAN ,"⏸️ Pausando após 4 vitórias consecutivas.")
@@ -199,8 +199,8 @@ def verificar_padroes(cores, numbers):
                 calcular_ganho_acumulado()
                 protegido += 1
                 print(f"⚪ Proteçao ativada!")
-                print(f"📊 Banca atual: R${banca:.2f}, Ganho acumulado: R${ganho_acumulado:.2f}")
-                enviar_mensagem(f"RELATORIO:\n⚪ Proteçao ativada!!\n📊 Banca atual: R${banca:.2f}\n🏆 Vitórias: {vitorias}\n💰 Ganho acumulado: R${ganho_acumulado:.2f}\n⚪ Protegidos: {protegido}\n\n\n\n")
+                print(f"📊 Banca atual: R${banca:.2f}")
+                enviar_mensagem(f"RELATORIO:\n⚪ Proteçao ativada!!\n\n\n\n")
                 fazendo_gale = False
                 resetar_entrada = True
                 
@@ -211,8 +211,8 @@ def verificar_padroes(cores, numbers):
                 calcular_ganho_acumulado()
                 protegido += 1
                 print(f"⚪ Proteçao ativada!")
-                print(f"📊 Banca atual: R${banca:.2f}, Ganho acumulado: R${ganho_acumulado:.2f}")
-                enviar_mensagem(f"RELATORIO:\n⚪ Proteçao ativada!!\n📊 Banca atual: R${banca:.2f}\n🏆 Vitórias: {vitorias}\n💰 Ganho acumulado: R${ganho_acumulado:.2f}\n⚪ Protegidos: {protegido}\n\n\n\n")
+                print(f"📊 Banca atual: R${banca:.2f}")
+                enviar_mensagem(f"RELATORIO:\n⚪ Proteçao ativada!!\n\n\n\n")
                 resetar_entrada = True
                 return  # Interrompe o fluxo após vitória no Branco
 
@@ -224,8 +224,8 @@ def verificar_padroes(cores, numbers):
                 calcular_ganho_acumulado()
                 perdas += 1
                 print_colorama(Fore.RED ,f"🚫 Derrota no Gale!")
-                print(f"📉 Banca atual: R${banca:.2f}, Ganho acumulado: R${ganho_acumulado:.2f}")
-                enviar_mensagem(f"RELATORIO:\n🚫 Derrota no Gale!\n📉 Banca atual: R${banca:.2f}\n💰 Ganho acumulado: R${ganho_acumulado:.2f}\n\n\n\n\n")
+                print(f"📉 Banca atual: R${banca:.2f}")
+                enviar_mensagem(f"RELATORIO:\n🚫 Derrota no Gale!\n\n\n\n\n")
                 resetar_entrada = True
                 fazendo_gale = False
 
@@ -270,14 +270,24 @@ def verificar_padroes(cores, numbers):
     # Verifica se há n cores consecutivas para realizar entrada
     if alertado and not entrada_realizada:
         if cores[-sequencia_para_entrada:] == ["Vermelho"] * sequencia_para_entrada:
-            print(sinal_vermelho)
-            enviar_mensagem(sinal_vermelho)
+            # print(sinal_vermelho)
+            # entrada_preto()
+            # enviar_mensagem(sinal_vermelho)
+            
+            menssage = entrada_preto(numbers[-1])
+            print(menssage)
+            enviar_mensagem(menssage)
+            
             entrada_realizada = True
             cor_da_entrada = "Preto"  # Entrada será no Preto
             aguardando_resultado = True
         elif cores[-sequencia_para_entrada:] == ["Preto"] * sequencia_para_entrada:
-            print(sinal_preto)
-            enviar_mensagem(sinal_preto)
+            # print(sinal_preto)
+            # enviar_mensagem(sinal_preto)
+            menssage = entrada_vermelho(numbers[-1])
+            print(menssage)
+            enviar_mensagem(menssage)
+            
             entrada_realizada = True
             cor_da_entrada = "Vermelho"  # Entrada será no Vermelho
             aguardando_resultado = True
@@ -286,7 +296,7 @@ def verificar_padroes(cores, numbers):
 try:
     acessar_pagina()
     while True:
-        os.system('cls' if os.name=='nt' else 'clear')
+        # os.system('cls' if os.name=='nt' else 'clear')
         print("Iniciando nova iteração do loop...")
         resultados, numbers = capturar_resultados()
         if resultados and resultados != ultima_lista:
