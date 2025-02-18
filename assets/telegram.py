@@ -1,5 +1,9 @@
 import os
 import requests
+from dotenv import load_dotenv
+
+# Carrega as variáveis do .env
+load_dotenv()
 
 # Configuração do Telegram
 token = os.getenv("TOKEN_TELEGRAM")

@@ -7,9 +7,8 @@ import os
 from colorama import init, Fore, Style
 
 from dotenv import load_dotenv
-from utils.telegram import enviar_mensagem
-from utils.logger import *
-from utils.utils import getInfo
+from assets.telegram import enviar_mensagem
+from assets.logger import *
 
 # Carrega as variáveis do .env
 load_dotenv()
@@ -28,35 +27,36 @@ nav = webdriver.Chrome(options=chrome_options)
 
 # Mensagens de status
 msg_ativo = "✅ Bot Ativo"
-aviso_generico = "⚠️ Atenção para entrada na cor:  "
 aviso_falso = "🚫 Alarme falso: Aguardando novo padrão."
-sinal_vermelho = "⚫⚫ Atenção: Entrar no Preto \n⚫⚫"
+sinal_vermelho = "⚫⚫ Atenção: Entrar no Preto ⚫⚫"
 sinal_preto = "🔴🔴 Atenção entrar no Vermelho 🔴🔴"
 sinal_gale = "📢 GALE - Duplicar aposta repetindo a entrada."
 proteger_branco_10 = "⚪ Lembrar de proteger patrimônio com 10% no Branco.⚪"
 msg_encerrado = "❌ Bot Encerrado"
 
 # Variáveis configuráveis pelo usuário
-sequencia_para_entrada = 5 # Configuração inicial: N cores iguais para entrada
-
-# Variáveis globais para controle
-historico_cores = []
-fazendo_gale = False
-ultima_lista = []  # Armazena a última lista capturada
-alertado = False
-entrada_realizada = False  # Controla se a entrada foi realizada
-banca = 140  # Banca inicial em reais
+banca = 42.02  # Banca inicial em reais
+banca_inicial = 42.02  # Armazena o valor inicial da banca para cálculo de vitórias e derrotas
 aposta_inicial = 2
 protecao_inicial = aposta_inicial * 0.10
 aposta_gale = 2 * aposta_inicial
 protecao_gale = protecao_inicial * 2  # Valor da aposta inicial
-vitorias = 52
+sequencia_para_entrada = 5 # Configuração inicial: N cores iguais para entrada
+
+# Controle de Resultados
+vitorias = 5
 perdas = 0
 protegido = 0
+
+# Variáveis globais para controle
+historico_cores = []
+fazendo_gale = True
+ultima_lista = []  # Armazena a última lista capturada
+alertado = False
+entrada_realizada = False  # Controla se a entrada foi realizada
 aguardando_resultado = False  # Variável para aguardar o próximo giro após entrada
 resetar_entrada = False  # Variável para resetar padrão após conclusão de Gale
 cor_da_entrada = None  # Armazena a cor da entrada para verificar vitória
-banca_inicial = 2000  # Armazena o valor inicial da banca para cálculo de vitórias e derrotas
 contador_atualizado = False  # Garante que vitória ou derrota seja contabilizada apenas uma vez
 em_pausa = False
 vitorias_consecutivas = 0
@@ -114,13 +114,13 @@ def capturar_resultados():
         print_resultados(resultados_print)
         print("\n")
         
-        return resultados
+        return resultados, resultados_print
     except Exception as e:
         print(f"Erro ao capturar resultados: {e}")
         return []
 
 # Verificar padrões e enviar sinais
-def verificar_padroes(cores):
+def verificar_padroes(cores, numbers):
     global fazendo_gale, alertado, entrada_realizada, aguardando_resultado, banca, aposta, vitorias, perdas, protegido, resetar_entrada, cor_da_entrada, banca_inicial, contador_atualizado, ganho_acumulado, vitorias_consecutivas, em_pausa
 
     if em_pausa:
@@ -164,7 +164,8 @@ def verificar_padroes(cores):
                 vitorias += 1
                 print_colorama(Fore.GREEN ,f"✅ Vitória sem Gale!")
                 print(f"📊 Banca atual: R${banca:.2f}, Ganho acumulado: R${ganho_acumulado:.2f}")
-                enviar_mensagem(f"RELATORIO:\n✅ Vitória com Gale!\n📊 Banca atual: R${banca:.2f}\n🏆 Vitórias: {vitorias}\n💰 Ganho acumulado: R${ganho_acumulado:.2f}\n\n\n\n\n")
+                enviar_mensagem(f"RELATORIO:\n✅ Vitória com Gale!\n\n\n\n")
+                # enviar_mensagem(f"RELATORIO:\n✅ Vitória com Gale!\n📊 Banca atual: R${banca:.2f}\n🏆 Vitórias: {vitorias}\n💰 Ganho acumulado: R${ganho_acumulado:.2f}\n\n\n\n\n")
                 resetar_entrada = True
                 fazendo_gale = False
 
@@ -240,12 +241,12 @@ def verificar_padroes(cores):
     # Verifica se há n-1 cores consecutivas e envia alerta apenas uma vez
     if not alertado and not entrada_realizada:
         if cores[-(sequencia_para_entrada-1):] == ["Vermelho"] * (sequencia_para_entrada-1):
-            menssage= aviso_entrada("Preto", aviso_generico)
+            menssage= aviso_entrada("Preto", numbers[-1], aposta_inicial)
             print(menssage)
             enviar_mensagem(menssage)
             alertado = True
         elif cores[-(sequencia_para_entrada-1):] == ["Preto"] * (sequencia_para_entrada-1):
-            menssage= aviso_entrada("Vermelho", aviso_generico)
+            menssage= aviso_entrada("Vermelho", numbers[-1], aposta_inicial)
             print(menssage)
             enviar_mensagem(menssage)
             alertado = True
@@ -287,10 +288,10 @@ try:
     while True:
         os.system('cls' if os.name=='nt' else 'clear')
         print("Iniciando nova iteração do loop...")
-        resultados = capturar_resultados()
+        resultados, numbers = capturar_resultados()
         if resultados and resultados != ultima_lista:
             ultima_lista = resultados
-            verificar_padroes(resultados)
+            verificar_padroes(resultados, numbers)
         else:
             print_colorama(Fore.BLUE,"Nenhuma alteração na lista capturada.")
         time.sleep(5)
