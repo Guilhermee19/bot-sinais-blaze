@@ -10,7 +10,7 @@ notificacoes_ativas = True
 
 # Mensagens de status
 msg_ativo = "✅ Bot Ativo"
-aviso_falso = "🚫 Alarme falso \nAguardando novo padrão."
+aviso_falso = "🚫 Alarme falso \n\nAguardando novo padrão."
 sinal_gale = "📢 GALE - Duplicar aposta repetindo a entrada."
 proteger_branco_10 = "⚪ Lembrar de proteger patrimônio com 10% no Branco.⚪"
 msg_encerrado = "❌ Bot Encerrado"
@@ -23,6 +23,7 @@ protecao_inicial = aposta_inicial * 0.10
 aposta_gale = 2 * aposta_inicial
 protecao_gale = protecao_inicial * 2  # Valor da aposta inicial
 sequencia_para_entrada = 5 # Configuração inicial: N cores iguais para entrada
+stop_vitorias_consecutivas = 5  # Configuração inicial: Parar após N vitórias consecutivas
 
 # Controle de Resultados
 vitorias = 8
@@ -41,3 +42,4 @@ cor_da_entrada = None  # Armazena a cor da entrada para verificar vitória
 contador_atualizado = False  # Garante que vitória ou derrota seja contabilizada apenas uma vez
 em_pausa = False
 vitorias_consecutivas = 0
+id_last_message = None

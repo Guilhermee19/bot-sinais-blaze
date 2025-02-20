@@ -1,5 +1,4 @@
 from colorama import init, Fore, Style
-from assets.telegram import enviar_mensagem
 
 def print_colorama(color, message):
   print(color + f"\n{message}")
@@ -30,26 +29,31 @@ def print_resultados(resultados):
     
     
 def aviso_entrada(cor="Preto", number={"cor": "Vermelho", "numero": 1}, aposta=2):
-    icon = "⚫"
-    if cor == "Vermelho":
-        icon = "🔴"
-        
-    return (f"⚠️ Atenção para possível entrada\n"
-            f"{icon} | {cor.capitalize()}\n")
-    
+    return (f"⚠️ <b>Analisando uma possível entrada!</b>\n")
     
     
 def entrada_preto(number={"cor": "Vermelho", "numero": 1}):
-    return (f"⚫⚫ Atenção: Entrar no Preto ⚫⚫\n"
-            f"Entrar apos {number['numero']}\n"
-            "⚪ | Proteger no Branco \n"
-            "📢 | Fazer até 2 GALES \n")
+    return (f"⏰ <b><i>SINAL CONFIRMADO!</i></b>\n\n"
+            f"Apostar no ⚫ PRETO | após o {number['numero']}\n\n"+
+            "<a href='https://blaze.bet.br/pt/games/double'>DOUBLE - Blaze</a>")
     
     
     
 def entrada_vermelho(number={"cor": "Vermelho", "numero": 1}):
-    return (f"🔴🔴 Atenção entrar no Vermelho 🔴🔴\n"
-            f"Entrar apos {number['numero']}\n"
-            "⚪ | Proteger no Branco \n"
-            "📢 | Fazer até 2 GALES \n")
+    return (f"⏰ <b><i>SINAL CONFIRMADO!</i></b>\n\n"
+            f"Apostar no 🔴 VERMELHO | após o {number['numero']}\n\n"+
+            "<a href='https://blaze.bet.br/pt/games/double'>DOUBLE - Blaze</a>")
+
+    
+    
+def vitoria_com_gales():
+    return ("----- RELATORIO -----\n"+
+            "✅ Vitória com Gale!\n")
+    
+    
+def vitoria_sem_gales(number={"cor": "Vermelho", "numero": 1}):
+    return (f"✅ Vitória no {number['number']}!\n")
+    
+def vitoria_sem_gales():
+    return ("✅ Vitória sem Gale!\n")
     

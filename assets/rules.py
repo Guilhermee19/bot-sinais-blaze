@@ -12,7 +12,7 @@ load_dotenv()
 init()  
 
 def verificar_padroes(cores, numbers):
-    global fazendo_gale, alertado, entrada_realizada, aguardando_resultado, banca, aposta, vitorias, perdas, protegido, resetar_entrada, cor_da_entrada, banca_inicial, contador_atualizado, ganho_acumulado, vitorias_consecutivas, em_pausa
+    global fazendo_gale, alertado, entrada_realizada, aguardando_resultado, banca, aposta, vitorias, perdas, protegido, resetar_entrada, cor_da_entrada, banca_inicial, contador_atualizado, ganho_acumulado, vitorias_consecutivas, em_pausa, id_last_message
 
     if em_pausa:
         # Aguardar o padrão de N + 2 cores iguais
@@ -21,6 +21,7 @@ def verificar_padroes(cores, numbers):
             enviar_mensagem(f"Padrão de pausa detectado: {cores[-(sequencia_para_entrada + 2):]}")
             em_pausa = False
             vitorias_consecutivas = 0  # Reseta o contador de vitórias consecutivas
+            id_last_message = None
         return
 
     # Reset do estado somente após vitória, derrota ou alarme falso
@@ -33,6 +34,7 @@ def verificar_padroes(cores, numbers):
         aguardando_resultado = False
         cor_da_entrada = None
         contador_atualizado = False
+        id_last_message = None
         aposta = aposta_inicial
         print(f"Após o reset: alertado={alertado}, entrada_realizada={entrada_realizada}, aguardando_resultado={aguardando_resultado}, cor_da_entrada={cor_da_entrada}")
         return
@@ -53,10 +55,11 @@ def verificar_padroes(cores, numbers):
                 banca += ganho_bruto
                 calcular_ganho_acumulado()
                 vitorias += 1
-                print_colorama(Fore.GREEN ,f"✅ Vitória sem Gale!")
                 print(f"📊 Banca atual: R${banca:.2f}")
-                enviar_mensagem(f"RELATORIO:\n✅ Vitória com Gale!\n\n\n\n")
-                # enviar_mensagem(f"RELATORIO:\n✅ Vitória com Gale! \n\n\n\n\n")
+                print_colorama(Fore.GREEN ,f"✅ Vitória sem Gale!")
+                vitoria_com_gales()
+                enviar_imagem('assets/img/WIN_NO_GALE.png') # Envia a imagem do resultado
+                
                 resetar_entrada = True
                 fazendo_gale = False
 
@@ -70,15 +73,17 @@ def verificar_padroes(cores, numbers):
                 banca += ganho_bruto
                 calcular_ganho_acumulado()
                 vitorias += 1
-                print_colorama(Fore.GREEN ,f"✅ Vitória sem Gale!")
                 print(f"📊 Banca atual: R${banca:.2f}")
-                enviar_mensagem(f"RELATORIO:\n✅ Vitória sem Gale! \n\n\n\n\n")
+                print_colorama(Fore.GREEN ,f"✅ Vitória sem Gale!")
+                vitoria_sem_gales(numbers[-1])
+                enviar_imagem('assets/img/WIN_NOT_GALE.png') # Envia a imagem do resultado
                 
-            if vitorias_consecutivas >= 4:
-                print_colorama(Fore.CYAN ,"⏸️ Pausando após 4 vitórias consecutivas.")
-                enviar_mensagem("⏸️ Pausando após 4 vitórias consecutivas, aguardando novo padrao.")
+            if vitorias_consecutivas >= stop_vitorias_consecutivas:
+                print_colorama(Fore.CYAN ,f"⏸️ Pausando após {stop_vitorias_consecutivas} vitórias consecutivas.")
+                enviar_mensagem(f"⏸️ Pausando após {stop_vitorias_consecutivas} vitórias consecutivas, aguardando novo padrao.")
                 em_pausa = True    
             resetar_entrada = True
+            id_last_message = None
             return
         
         elif cores[-1] == "Branco":  # Branco
@@ -94,6 +99,7 @@ def verificar_padroes(cores, numbers):
                 enviar_mensagem(f"RELATORIO:\n⚪ Proteçao ativada!!\n\n\n\n")
                 fazendo_gale = False
                 resetar_entrada = True
+                id_last_message = None
                 
             else:
                 banca -= (aposta_inicial + protecao_inicial)
@@ -105,6 +111,7 @@ def verificar_padroes(cores, numbers):
                 print(f"📊 Banca atual: R${banca:.2f}")
                 enviar_mensagem(f"RELATORIO:\n⚪ Proteçao ativada!!\n\n\n\n")
                 resetar_entrada = True
+                id_last_message = None
                 return  # Interrompe o fluxo após vitória no Branco
 
         elif cores[-1] != cor_da_entrada:  # Derrota
@@ -116,15 +123,18 @@ def verificar_padroes(cores, numbers):
                 perdas += 1
                 print_colorama(Fore.RED ,f"🚫 Derrota no Gale!")
                 print(f"📉 Banca atual: R${banca:.2f}")
-                enviar_mensagem(f"RELATORIO:\n🚫 Derrota no Gale!\n\n\n\n\n")
+                # enviar_mensagem(f"🚫 Derrota no Gale!\n\n\n\n\n")
+                enviar_imagem('assets/img/LOSS.png') # Envia a imagem do resultado
                 resetar_entrada = True
                 fazendo_gale = False
+                id_last_message = None
 
             else:  # Derrota inicial, inicia Gale
                 banca -= (aposta_inicial + protecao_inicial)
                 print_colorama(Fore.RED ,f"🚫 Derrota inicial. Iniciando Gale.")
                 print(sinal_gale)
                 enviar_mensagem(sinal_gale)
+                id_last_message = None
                 fazendo_gale = True  # Ativa o Gale
                 return  # Interrompe o fluxo após derrota
 
@@ -134,33 +144,42 @@ def verificar_padroes(cores, numbers):
         if cores[-(sequencia_para_entrada-1):] == ['Vermelho'] * (sequencia_para_entrada-1):
             menssage= aviso_entrada("Preto", numbers[-1], aposta_inicial)
             print(menssage)
-            enviar_mensagem(menssage)
+            id_last_message = enviar_mensagem(menssage)
             alertado = True
         elif cores[-(sequencia_para_entrada-1):] == ['Preto'] * (sequencia_para_entrada-1):
             menssage= aviso_entrada("Vermelho", numbers[-1], aposta_inicial)
             print(menssage)
-            enviar_mensagem(menssage)
+            id_last_message = enviar_mensagem(menssage)
             alertado = True
 
     # Verifica se há n-1 cores iguais + 1 cor diferente (alarme falso)
     if alertado and not entrada_realizada:
         if cores[-sequencia_para_entrada:-1] == ['Vermelho'] * (sequencia_para_entrada-1) and cores[-1] != "Vermelho":
             print(aviso_falso)
-            enviar_mensagem(aviso_falso + "\n\n\n\n\n")
+            # enviar_mensagem(aviso_falso + "\n\n\n\n\n")
+            if id_last_message:  # Ensure id_last_message is set
+                apagar_mensagem(id_last_message)
             resetar_entrada = True
             alertado = False  # Reseta o estado do alerta para permitir novos padrões
             entrada_realizada = False  # Reseta o padrão para novas entradas
+            id_last_message = None
 
         elif cores[-sequencia_para_entrada:-1] == ['Preto'] * (sequencia_para_entrada-1) and cores[-1] != "Preto":
             print(aviso_falso)
-            enviar_mensagem(aviso_falso + "\n\n\n\n\n")
+            # id_last_message = enviar_mensagem(aviso_falso + "\n\n\n\n\n")
+            if id_last_message:  # Ensure id_last_message is set
+                apagar_mensagem(id_last_message)
             resetar_entrada = True
             alertado = False  # Reseta o estado do alerta para permitir novos padrões
-            entrada_realizada = False  # Reseta o padrão para novas entradas  
+            entrada_realizada = False  # Reseta o padrão para novas entradas
+            id_last_message = None
 
     # Verifica se há n cores consecutivas para realizar entrada
     if alertado and not entrada_realizada:
         if cores[-sequencia_para_entrada:] == ['Vermelho'] * sequencia_para_entrada:
+            if id_last_message:  # Ensure id_last_message is set
+                apagar_mensagem(id_last_message)
+                
             menssage = entrada_preto(numbers[-1])
             print(menssage)
             enviar_mensagem(menssage)
@@ -168,7 +187,12 @@ def verificar_padroes(cores, numbers):
             entrada_realizada = True
             cor_da_entrada = "Preto"  # Entrada será no Preto
             aguardando_resultado = True
+            id_last_message = None
+            
         elif cores[-sequencia_para_entrada:] == ['Preto'] * sequencia_para_entrada:
+            if id_last_message:  # Ensure id_last_message is set
+                apagar_mensagem(id_last_message)
+                
             menssage = entrada_vermelho(numbers[-1])
             print(menssage)
             enviar_mensagem(menssage)
@@ -176,3 +200,5 @@ def verificar_padroes(cores, numbers):
             entrada_realizada = True
             cor_da_entrada = "Vermelho"  # Entrada será no Vermelho
             aguardando_resultado = True
+            id_last_message = None
+            

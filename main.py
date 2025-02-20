@@ -2,7 +2,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.service import Service
 import time
 import os
 from colorama import init, Fore
@@ -28,7 +27,9 @@ def acessar_pagina():
         )
         print()
         print_colorama(Fore.BLUE, "Página acessada com sucesso e conteúdo carregado.")
-        enviar_mensagem(msg_ativo)
+        print_colorama(Fore.GREEN, msg_ativo)
+        
+        # enviar_mensagem(msg_ativo)
     except Exception as e:
         print(f"Erro ao carregar a página: {e}")
 
@@ -90,8 +91,9 @@ try:
             # print_colorama(Fore.BLUE,"Nenhuma alteração na lista capturada.")
         time.sleep(5)
 except Exception as e:
-    print(f"❌ Erro: {e}")
+    print_colorama(Fore.RED, f"❌ [Erro] {e}")
 finally:
-    print(msg_encerrado)
-    enviar_mensagem(msg_encerrado)
+    print_colorama(Fore.RED, msg_encerrado)
+    
+    # enviar_mensagem(msg_encerrado)
     nav.quit()
