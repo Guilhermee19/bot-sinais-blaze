@@ -29,7 +29,7 @@ def print_resultados(resultados):
     
     
 def aviso_entrada(cor="Preto", number={"cor": "Vermelho", "numero": 1}, aposta=2):
-    return (f"⚠️ <b>Analisando uma possível entrada!</b>\n")
+    return (f"⚠️ <b>Analisando uma possível entrada!</b> ⚠️\n")
     
     
 def entrada_preto(number={"cor": "Vermelho", "numero": 1}):
